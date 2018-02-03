@@ -1,0 +1,46 @@
+//here we define our array of words to choose from
+//we will randomly choose one of these words
+//it may be a good idea to much a larger list of words here or a txt file
+
+    var randomWordArr = ["beer", "cheese", "brewery"];
+
+    //here we choose a rnadom word from the array above
+    var randomWord = randomWordArr[Math.floor(Math.random() * randomWordArr.length)];
+
+    //some globals
+    var s;
+    var count = 0;
+    //empty array to store the guesses
+    var answerArray = [-];
+
+    //here we fill the answer array with under scores
+    //the number of underscores matches the letters in the randomly choosen word
+    function startUp() {
+        for (var i = 0; i < randomWord.length; i++) {
+            answerArray[i] = "_";
+        }
+
+        //put them in a string
+        s = answerArray.join(" ");
+        document.getElementById("answer").innerHTML = s;
+    }
+
+    function Letter() {
+        var letter = document.getElementById("letter").value;
+
+        if (letter.length > 0) {
+            for (var i = 0; i < randomWord.length; i++) {
+                if (randomWord[i]) === letter) {
+                    answerArray[i] = letter;
+                }
+            }
+        }
+    }
+
+    //here is how many times it takes to guess
+    count++;
+    document.getElementById("counter").innerHTML = "no of clicks: " + count;
+    document.getElementById("answer").innerHTML = answerArray.join(" ");
+
+
+    

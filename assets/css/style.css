@@ -42,11 +42,15 @@ main {
 
 .columnImg {
     grid-column: 2/3;
+    display: grid;
     border: #ffffff 1px dotted;
+}
+
+.gallows {
+    justify-self: center;
 }
 
 .columnGame {
     grid-column: 3/4;
     border: #ffffff 1px dotted;
 }
-
