@@ -14,7 +14,7 @@
         <h1>HANGMAN</h1>
     </header>
 
-    <main>
+    <main onload="pickAndConvertWord()">
        <div class="wrapper">
             <div class = "columnImg">
                 <img class="gallows" src="assets/images/gallows.jpeg" alt="Gallows">
@@ -44,8 +44,8 @@
                 
                 <br>
                 <!-- <hr> -->
-                <p id="guessesLeft">
-                    Numbers of guesses remaining
+                <p>
+                    Numbers of guesses remaining: <span id="guessesLeft"></span>
                 </p>
                 
                 <br>
