@@ -25,26 +25,29 @@
 //picks another word and switches images to the same as randomWord
 
 
+console.log('working');
 
 var wordArray = ["cardinals", "falcons", "ravens", "bills", "panthers", "bears"
     , "bengals", "browns", "cowboys", "broncos", "lions", "packers", "texans", "colts"
-    , "jaguars", "chiefs", "chargers", "rams", "dolphins", "vikings", " patriots"
+    , "jaguars", "chiefs", "chargers", "rams", "dolphins", "vikings", "patriots"
     , "saints", "giants", "jets", "raiders", "eagles", "steelers", "fourtyniners"
     , "seahawks", "buccaneers", "titans", "redskins"]
 
 var winCounter = 0;
+var letterCounter = 0;
 var guessesRemain = 13;
 var lettersGuessed = [];
-var imgArray = [];
+var imgArray = [];  //Stores pathway to img src and index is equal wordArray[i]
 var answerArray = [];
-var s;
 var userGuess = "";
+var randomWord = "";
+var allLettersPicked = [];
 
 //Function to pick a random word from wordArray and convert to equal length "_"
-//function pickAndConvertWord() {
+function pickAndConvertWord() {
 
     // Picks a random word from the word array
-    var randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
+    randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
     console.log(randomWord);
 
     // Convert randomWord to equal length of "_"
@@ -54,9 +57,35 @@ var userGuess = "";
 
     // Takes out commas of current word
     document.getElementById("currentWord").innerHTML = answerArray.join(" ")
-//}
+ 
+}
 
+function letterCollection(userGuess) {
+    if (allLettersPicked.indexOf(userGuess) > -1) {
+        console.log('we found a letter already guessed');
+        return true;
+    } else {
+        console.log('did not find letter guessed');
+        return false;
+    }
+}
 
+// function reset() {
+//     winCounter++;
+//     document.getElementById("wins").innerHTML = winCounter;
+//     answerArray = [];
+//     allLettersPicked = [];
+//     letterCounter = 0;
+//     guessesRemain = 13;
+//     document.getElementById("guessesLeft").innerHTML = guessesRemain;
+//     lettersGuessed = [];
+//     document.getElementById("lettersUsed").innerHTML = lettersGuessed;
+//     pickAndConvertWord();
+// }
+
+pickAndConvertWord();
+
+//function gameLoop()
 //function that starts when key is pressed
 document.onkeydown = function (event) 
 {
@@ -64,103 +93,54 @@ document.onkeydown = function (event)
     // sets the variable userGuess to the user key input
     var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
 
-    //checks if userGuess is in randomWord array
-    if (randomWord.indexOf(userGuess) >-1) 
-    {
-        for(i=0; i<randomWord; i++) 
-        {
-            if (randomWord[i] === userGuess) 
-            {
+    letterCollection(userGuess);
+    
+    
+    if (letterCollection(userGuess)) {
+        alert("can't guess same letter twice")
+    } else if (randomWord.indexOf(userGuess) >-1) {
+        allLettersPicked.push(userGuess);
+        for(i=0; i<randomWord.length; i++) {
+            if (randomWord[i] === userGuess) {
+                console.log("guess correctly")
                 answerArray[i] = userGuess;
+                letterCounter++;
+                console.log('about to display answer' , answerArray)
                 document.getElementById("currentWord").innerHTML = answerArray.join(" ");
 
+                if (letterCounter === randomWord.length) {
+                    //reset();
+                    winCounter++;
+                    document.getElementById("wins").innerHTML = winCounter;
+                    //call reset function
+                    answerArray = [];
+                    allLettersPicked = [];
+                    letterCounter = 0;
+                    guessesRemain = 13;
+                    document.getElementById("guessesLeft").innerHTML = guessesRemain;
+                    lettersGuessed = [];
+                    document.getElementById("lettersUsed").innerHTML = lettersGuessed;
+                    pickAndConvertWord();
+                    return;
+                }
             }
         }
-    } 
-    
-    //If userGuess != randomWord array then lowers guesses remain and pushes
-    //user guess to lettersGuessed array
-    else
-    {
+    } else {
+        console.log("we hit else statement")
         guessesRemain--;
         document.getElementById("guessesLeft").innerHTML = guessesRemain;
         lettersGuessed.push(userGuess);
         document.getElementById("lettersUsed").innerHTML = lettersGuessed;
+        if (guessesRemain === 0) {
+            answerArray = [];
+            allLettersPicked = [];
+            letterCounter = 0;
+            guessesRemain = 13;
+            document.getElementById("guessesLeft").innerHTML = guessesRemain;
+            lettersGuessed = [];
+            document.getElementById("lettersUsed").innerHTML = lettersGuessed;
+            pickAndConvertWord();
+            return;
+        }
     }   
-
-
 }
-
-
-
-
-
-
-
-
-
-
-/*
-// Word array
-var wordArray = ["cardinals", "falcons", "ravens", "bills", "panthers", "bears"
-    , "bengals", "browns", "cowboys", "broncos", "lions", "packers", "texans", "colts"
-    , "jaguars", "chiefs", "chargers", "rams", "dolphins", "vikings", " patriots"
-    , "saints", "giants", "jets", "raiders", "eagles", "steelers", "fourtyniners"
-    , "seahawks", "buccaneers", "titans", "redskins"];
-
-var randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
-
-var winCounter = 0;
-var guessesRemain = 13;
-var lettersGuessed = [];
-var imgArray = [];
-var answerArray = [];
-var s;
-var userGuess = "";
-
-
-
-//get users guess
-document.onkeyup = function(event) {
-    var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
-    guessesRemain--;
- 
-
-//check users guess for equal letters in current word
-
-    //if guess === letter reveal letter in current word
-    if (userGuess === randomWord[i]) {
-        answerArray[i] = userGuess;
-        
-    } 
-    //else guess !== letter push guess to lettersGuessed array
-    else {
-        lettersGuessed.push(userGuess);
-        document.getElementById("lettersUsed").innerHTML = lettersGuessed;
-        
-    }
-}  
-
-    
-
-//If current word is revealed then winCounter++ and pick another word
-function endGame() {
-    if (answerArray !== "_") {
-        winCounter++;
-        document.getElementById("#wins") = winCounter;
-        // calls function that randomly generates new word;
-    } 
-
-    else if (answerArray === "_") {
-        //alert player to guess another letter
-        alert("Please guess another letter")
-    }
-
-    else {
-        guessesRemain === 0;
-        //alert player they lost and show randomWord
-        alert("You have ran out of guesses" + randomWord)
-        //call function that randomly generates a new word
-    }
-}
-*/
